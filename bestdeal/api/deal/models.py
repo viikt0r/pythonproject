@@ -1,8 +1,9 @@
 from django.db import models
 from django.core.files.storage import FileSystemStorage
-from bestdeal.api.tag.models import Tag
-from bestdeal.api.marque.models import Marque
+from . . tag.models import Tag
+from . . marque.models import Marque
 from django.contrib.auth.models import User
+from django_countries.fields import CountryField
 import uuid
 
 
@@ -10,20 +11,26 @@ fs = FileSystemStorage(location='/photos')
 
 
 class Deal(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.AutoField(primary_key=True)
+    id_guid = models.UUIDField(default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=200)
-    url = models.URLField(default='')
+    link = models.URLField(default='')
     photo = models.ImageField(storage=fs, default='')
     content = models.TextField(default='')
+    promo_code = models.CharField(max_length=50, null=True, default='')
+    statut_promo = models.BooleanField(default=False)
     price_before = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     price_after = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     shipping = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     start_date = models.DateField(auto_now=False, auto_now_add=False, null=True, blank=True)
     end_date = models.DateField(auto_now=False, auto_now_add=False, null=True, blank=True)
+    in_shop = models.BooleanField(default=False)
+    active = models.BooleanField(default=True)
+    country = CountryField(blank_label='(select country)', blank=True, null=True, default='CA')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     dea_mar_fk = models.ForeignKey(Marque, related_name='dea_marques', on_delete=models.CASCADE)
-    tag_set = models.ManyToManyField(Tag)
+    tag_set = models.ManyToManyField(Tag, related_name='dea_tags')
     user_add = models.ForeignKey(User, related_name='dea_users', on_delete=models.CASCADE)
 
     class Meta:
@@ -34,7 +41,8 @@ class Deal(models.Model):
 
 
 class Score(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.AutoField(primary_key=True)
+    id_guid = models.UUIDField(default=uuid.uuid4, editable=False)
     sco_dea_fk = models.ForeignKey(Deal, related_name='sco_deals', on_delete=models.CASCADE)
     user_add = models.ForeignKey(User, related_name='sco_users', on_delete=models.CASCADE)
     score = models.FloatField() #-1 ou 1
@@ -43,3 +51,12 @@ class Score(models.Model):
 
     def __str__(self):
         return self.score
+
+
+class Follow(models.Model):
+    id = models.AutoField(primary_key=True)
+    id_guid = models.UUIDField(default=uuid.uuid4, editable=False)
+    fol_dea_fk = models.ForeignKey(Deal, related_name='fol_deals', on_delete=models.CASCADE)
+    user_add = models.ForeignKey(User, related_name='fol_users', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+

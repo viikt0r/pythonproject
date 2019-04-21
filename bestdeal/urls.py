@@ -15,3 +15,8 @@ urlpatterns = [
     path('', include('bestdeal.api.{}.urls'.format(entity)))
     for entity in entities
 ]
+
+
+urlpatterns += [
+    path('api-auth/', include('rest_framework.urls')),
+]

@@ -1,8 +1,8 @@
-from rest_framework import generics, mixins
+from rest_framework import generics, mixins, permissions
 from . models import Marque
 from . serializers import MarquesSerializer, MarquesAllSerializer
 from django.db.models import Q
-
+from . . . permissions import IsOwnerOrReadOnly
 
 class MarqueListView(mixins.CreateModelMixin, generics.ListAPIView):
     id = 'pk'
@@ -18,13 +18,14 @@ class MarqueListView(mixins.CreateModelMixin, generics.ListAPIView):
         return qs
 
     def perform_create(self, serializer):
-        serializer.save()
+        serializer.save(user_add=self.request.user)
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
 
 class MarqueDetailView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
     id = 'pk'
     serializer_class = MarquesSerializer
 
@@ -34,5 +35,7 @@ class MarqueDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 class MarqueFk(generics.ListAPIView):
     id = 'pk'
-    queryset = Marque.objects.all()
     serializer_class = MarquesAllSerializer
+
+    def get_queryset(self):
+        return Marque.objects.all()

@@ -5,12 +5,12 @@ import uuid
 
 
 class Comment(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    author = models.CharField(max_length=200)
+    id = models.AutoField(primary_key=True)
+    id_guid = models.UUIDField(default=uuid.uuid4, editable=False)
     text = models.TextField()
+    approved_comment = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    approved_comment = models.BooleanField(default=False)
+    updated_at = models.DateTimeField(auto_now=True)    
     com_dea_fk = models.ForeignKey(Deal, related_name='com_deals', on_delete=models.CASCADE)
     user_add = models.ForeignKey(User, related_name='com_users', on_delete=models.CASCADE)
 
@@ -20,3 +20,16 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.text
+
+
+class Like(models.Model):
+    id = models.AutoField(primary_key=True)
+    id_guid = models.UUIDField(default=uuid.uuid4, editable=False)
+    lik_com_fk = models.ForeignKey(Comment, related_name='lik_comments', on_delete=models.CASCADE)
+    user_add = models.ForeignKey(User, related_name='lik_comments', on_delete=models.CASCADE)
+    like = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.like
