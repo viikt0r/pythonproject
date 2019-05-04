@@ -3,10 +3,11 @@ from . models import Deal, Score
 from . serializers import DealsAllSerializer, DealsSerializer, DealsCommentSerializer, ScoreSerializer
 from django.db.models import Q
 from . . . permissions import IsOwnerOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 
 
 class DealListView(mixins.CreateModelMixin, generics.ListAPIView):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
+    permission_classes = (IsAuthenticated,)#(permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
     id = 'pk'
     serializer_class = DealsAllSerializer
 

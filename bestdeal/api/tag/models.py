@@ -16,5 +16,8 @@ class Tag(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     user_add = models.ForeignKey(User, related_name='tag_users', on_delete=models.CASCADE)
 
+    class Meta:
+        ordering = ['name']
+        
     def __str__(self):
         return self.name

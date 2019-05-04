@@ -1,9 +1,10 @@
 from os import listdir
 from os.path import join, isdir
-
 from django.urls import path, include
-
 from pythonproject.settings import BASE_DIR
+from rest_framework_swagger.views import get_swagger_view
+
+schema_view = get_swagger_view(title='Bestdeal API')
 
 API_DIR = 'bestdeal/api/'
 entities = [directory
@@ -18,5 +19,5 @@ urlpatterns = [
 
 
 urlpatterns += [
-    path('api-auth/', include('rest_framework.urls')),
+    path('docs/', schema_view),
 ]

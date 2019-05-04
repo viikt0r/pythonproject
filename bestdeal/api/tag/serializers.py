@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from . models import Tag
-from . . . api.deal.serializers import DealsAllSerializer
+#from . . . api.deal.serializers import DealsAllSerializer
 
 class TagSerializer(serializers.HyperlinkedModelSerializer):
     user_add = serializers.ReadOnlyField(source='user_add.username')
@@ -14,7 +14,7 @@ class TagSerializer(serializers.HyperlinkedModelSerializer):
 
 class TagAllSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name="tag-detail")
-    dea_tags = DealsAllSerializer(many=True, read_only=True)
+    #dea_tags = DealsAllSerializer(many=True, read_only=True)
 
     class Meta:
         model = Tag

@@ -3,6 +3,7 @@ from . models import Marque
 from . serializers import MarquesSerializer, MarquesAllSerializer
 from django.db.models import Q
 from . . . permissions import IsOwnerOrReadOnly
+from django.core.files.storage import FileSystemStorage
 
 class MarqueListView(mixins.CreateModelMixin, generics.ListAPIView):
     id = 'pk'
@@ -21,6 +22,9 @@ class MarqueListView(mixins.CreateModelMixin, generics.ListAPIView):
         serializer.save(user_add=self.request.user)
 
     def post(self, request, *args, **kwargs):
+        #photo = request.FILES['photo']
+        #fs = FileSystemStorage()
+        #filename = fs.save(photo.name, photo)
         return self.create(request, *args, **kwargs)
 
 

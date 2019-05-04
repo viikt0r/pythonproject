@@ -40,11 +40,17 @@ INSTALLED_APPS = [
     'bestdeal.apps.BestdealConfig',
     'rest_framework',
     'django_countries',
+    'rest_framework_swagger',
+    'rest_framework.authtoken',
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    )
 }
 
 MIDDLEWARE = [
@@ -130,3 +136,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+LOGIN_URL = 'rest_framework:login'
+LOGOUT_URL = 'rest_framework:logout'
