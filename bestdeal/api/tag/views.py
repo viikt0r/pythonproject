@@ -1,10 +1,15 @@
 from rest_framework import generics, mixins, permissions
 from . models import Tag
-from . serializers import TagSerializer, TagAllSerializer
+from . serializers import TagSerializer
 from django.db.models import Q
 from . . . permissions import IsOwnerOrReadOnly
+from . . deal.serializers import TagAllSerializer
 
 class TagListView(mixins.CreateModelMixin, generics.ListAPIView):
+    """
+    Liste des tags avec la possibilité de faire une recherche
+    """
+
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
     id = 'pk'
     serializer_class = TagSerializer
@@ -26,6 +31,10 @@ class TagListView(mixins.CreateModelMixin, generics.ListAPIView):
 
 
 class TagDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Détail d'un tag
+    """
+
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
     id = 'pk'
     serializer_class = TagSerializer
@@ -33,9 +42,4 @@ class TagDetailView(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         return Tag.objects.all()
 
-class TagFk(generics.ListAPIView):
-    id = 'pk'
-    serializer_class = TagAllSerializer
 
-    def get_queryset(self):
-        return Tag.objects.all()

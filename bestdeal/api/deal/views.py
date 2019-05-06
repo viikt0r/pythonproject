@@ -1,13 +1,13 @@
 from rest_framework import generics, mixins, permissions
 from . models import Deal, Score
-from . serializers import DealsAllSerializer, DealsSerializer, DealsCommentSerializer, ScoreSerializer
+from . . tag.models import Tag
+from . serializers import DealsAllSerializer, DealsSerializer, DealsCommentSerializer, ScoreSerializer, TagAllSerializer
 from django.db.models import Q
 from . . . permissions import IsOwnerOrReadOnly
 from rest_framework.permissions import IsAuthenticated
 
-
 class DealListView(mixins.CreateModelMixin, generics.ListAPIView):
-    permission_classes = (IsAuthenticated,)#(permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
+    permission_classes = (IsAuthenticated,)
     id = 'pk'
     serializer_class = DealsAllSerializer
 
@@ -28,9 +28,9 @@ class DealListView(mixins.CreateModelMixin, generics.ListAPIView):
 
 
 class DealDetailView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
+    permission_classes = (IsAuthenticated,)
     id = 'pk'
-    serializer_class = DealsAllSerializer
+    serializer_class = DealsSerializer
 
     def get_queryset(self):
         return Deal.objects.all()
@@ -66,6 +66,16 @@ class ScoreListView(mixins.CreateModelMixin, generics.ListAPIView):
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
+
+class TagDeals(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Liste des deals pour un tag
+    """
+    id = 'pk'
+    serializer_class = TagAllSerializer
+
+    def get_queryset(self):
+        return Tag.objects.all()
 
 #from django.db.models import Sum
 #all_sum = transaction.aggregate(Sum('amount'))['amount__sum']

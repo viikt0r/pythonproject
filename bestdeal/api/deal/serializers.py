@@ -2,17 +2,34 @@ from rest_framework import serializers
 from . models import Deal, Score
 from . . commentaire.serializers import CommentSerializerNoFk
 from . . user.serializers import UserSerializer
-from . . marque.serializers import MarquesSerializer
+from . . marque.serializers import MarquesSimpleSerializer
 from . . tag.serializers import TagSerializer
+from . . tag.models import Tag
 from django_countries.fields import CountryField
 from django.db.models import Sum
 
+
 class DealsSerializer(serializers.HyperlinkedModelSerializer):
+    country = CountryField()
+    nb_comment = serializers.SerializerMethodField(read_only=True)
+    moyenne_vote = serializers.SerializerMethodField(read_only=True)
+    user_add = serializers.ReadOnlyField(source='user_add.username')
+    marques = MarquesSimpleSerializer(read_only=True,source='dea_mar_fk')
+    tags = TagSerializer(many=True, read_only=True, source='tag_set')
+
+    def get_nb_comment(self, Comment):
+        return Comment.com_deals.count()
+
+    def get_moyenne_vote(self, Score):
+        totalsco = Score.sco_deals.aggregate(moyenne_vote=Sum('score'))
+        return totalsco["moyenne_vote"]
 
     class Meta:
         model = Deal
-        fields = ('id', 'title', 'content')
-        # fields = '__all__'
+        fields = ('url', 'id', 'id_guid', 'title', 'link', 'photo', 
+        'price_before', 'price_after', 'shipping', 'created_at', 
+        'marques', 'user_add', 'nb_comment', 'moyenne_vote', 'country', 'tags')
+
     
 class ScoreSerializer(serializers.ModelSerializer):
 
@@ -22,42 +39,48 @@ class ScoreSerializer(serializers.ModelSerializer):
 
 class DealsAllSerializer(serializers.HyperlinkedModelSerializer):
     country = CountryField()
-    total_com = serializers.SerializerMethodField(read_only=True)
-    total_sco = serializers.SerializerMethodField(read_only=True)
+    nb_comment = serializers.SerializerMethodField(read_only=True)
+    moyenne_vote = serializers.SerializerMethodField(read_only=True)
     user_add = serializers.ReadOnlyField(source='user_add.username')
-    dea_mar_fk = MarquesSerializer(read_only=True)
-    tag_set = TagSerializer(many=True,read_only=True)
-    #dea_mar_fk = serializers.HyperlinkedRelatedField(view_name='marque-detail', read_only=True)
+    marques = MarquesSimpleSerializer(read_only=True,source='dea_mar_fk')
 
-    def get_total_com(self, Comment):
+    def get_nb_comment(self, Comment):
         return Comment.com_deals.count()
 
-    def get_total_sco(self, Score):
-        totalsco = Score.sco_deals.aggregate(total_sco=Sum('score'))
-        return totalsco["total_sco"]
+    def get_moyenne_vote(self, Score):
+        totalsco = Score.sco_deals.aggregate(moyenne_vote=Sum('score'))
+        return totalsco["moyenne_vote"]
 
     class Meta:
         model = Deal
-        fields = '__all__'
+        fields = ('url', 'id', 'id_guid', 'title', 'link', 'photo', 
+        'price_before', 'price_after', 'shipping', 'created_at', 
+        'marques', 'user_add', 'nb_comment', 'moyenne_vote')
         
         
 class DealsCommentSerializer(serializers.HyperlinkedModelSerializer):
     country = CountryField()
     com_deals = CommentSerializerNoFk(many=True, read_only=True)
-    total_com = serializers.SerializerMethodField(read_only=True)
-    total_sco = serializers.SerializerMethodField(read_only=True)
+    nb_comment = serializers.SerializerMethodField(read_only=True)
+    moyenne_vote = serializers.SerializerMethodField(read_only=True)
     user_add = serializers.ReadOnlyField(source='user_add.username')
 
-    def get_total_com(self, Comment):
+    def get_nb_comment(self, Comment):
         return Comment.com_deals.count()
 
-    def get_total_sco(self, Score):
-        totalsco = Score.sco_deals.aggregate(total_sco=Sum('score'))
-        return totalsco["total_sco"]
+    def get_moyenne_vote(self, Score):
+        totalsco = Score.sco_deals.aggregate(moyenne_vote=Sum('score'))
+        return totalsco["moyenne_vote"]
 
     class Meta:
         model = Deal
         fields = '__all__'
     
 
+class TagAllSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name="tag-detail")
+    dea_tags = DealsSerializer(many=True, read_only=True)
 
+    class Meta:
+        model = Tag
+        fields = ('url', 'id', 'name', 'photo', 'main', 'dea_tags')

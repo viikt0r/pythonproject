@@ -20,7 +20,11 @@ class MarquesAllSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('url', 'id', 'name', 'photo', 'link', 'dea_marques', 'user_add')
         depth = 1
 
-
+class MarquesSimpleSerializer(serializers.HyperlinkedModelSerializer):
+    
+    class Meta:
+        model = Marque
+        fields = ('url', 'id', 'name')
 
     
 
