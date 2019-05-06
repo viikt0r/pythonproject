@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.files.storage import FileSystemStorage
+from django.core.validators import MaxValueValidator, MinValueValidator
 from . . tag.models import Tag
 from . . marque.models import Marque
 from django.contrib.auth.models import User
@@ -45,7 +46,7 @@ class Score(models.Model):
     id_guid = models.UUIDField(default=uuid.uuid4, editable=False)
     sco_dea_fk = models.ForeignKey(Deal, related_name='sco_deals', on_delete=models.CASCADE)
     user_add = models.ForeignKey(User, related_name='sco_users', on_delete=models.CASCADE)
-    score = models.FloatField() #-1 ou 1
+    score = models.IntegerField(validators=[MinValueValidator(-1), MinValueValidator(1),]) #-1 ou 1
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
