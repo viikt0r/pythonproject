@@ -26,9 +26,7 @@ class DealsSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Deal
-        fields = ('url', 'id', 'id_guid', 'title', 'link', 'photo', 
-        'price_before', 'price_after', 'shipping', 'created_at', 
-        'marques', 'user_add', 'nb_comment', 'moyenne_vote', 'country', 'tags')
+        fields = '__all__'
 
     
 class ScoreSerializer(serializers.ModelSerializer):
@@ -79,8 +77,12 @@ class DealsCommentSerializer(serializers.HyperlinkedModelSerializer):
 
 class TagAllSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name="tag-detail")
+    nb_deals = serializers.SerializerMethodField(read_only=True)
     dea_tags = DealsSerializer(many=True, read_only=True)
+
+    def get_nb_deals(self, Deal):
+        return Deal.dea_tags.count()
 
     class Meta:
         model = Tag
-        fields = ('url', 'id', 'name', 'photo', 'main', 'dea_tags')
+        fields = ('url', 'id', 'name', 'photo', 'main', 'nb_deals', 'dea_tags')

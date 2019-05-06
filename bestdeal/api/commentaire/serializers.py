@@ -4,7 +4,6 @@ from . . user.serializers import UserSerializer
 
 
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name="comment-detail")
     user_add = UserSerializer(read_only=True)
 
     class Meta:
@@ -12,7 +11,6 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 class CommentSerializerNoFk(serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name="comment-detail")
     user_add = serializers.ReadOnlyField(source='user_add.username')
 
     class Meta:
