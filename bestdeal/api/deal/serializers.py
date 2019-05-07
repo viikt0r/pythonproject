@@ -51,28 +51,20 @@ class DealsAllSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Deal
-        fields = ('url', 'id', 'id_guid', 'title', 'link', 'photo', 
-        'price_before', 'price_after', 'shipping', 'created_at', 
-        'marques', 'user_add', 'nb_comment', 'moyenne_vote')
+        fields = '__all__'
         
         
 class DealsCommentSerializer(serializers.HyperlinkedModelSerializer):
-    country = CountryField()
+    
     com_deals = CommentSerializerNoFk(many=True, read_only=True)
     nb_comment = serializers.SerializerMethodField(read_only=True)
-    moyenne_vote = serializers.SerializerMethodField(read_only=True)
-    user_add = serializers.ReadOnlyField(source='user_add.username')
 
     def get_nb_comment(self, Comment):
         return Comment.com_deals.count()
 
-    def get_moyenne_vote(self, Score):
-        totalsco = Score.sco_deals.aggregate(moyenne_vote=Sum('score'))
-        return totalsco["moyenne_vote"]
-
     class Meta:
         model = Deal
-        fields = '__all__'
+        fields = ('url', 'id', 'nb_comment', 'com_deals')
     
 
 class TagAllSerializer(serializers.HyperlinkedModelSerializer):

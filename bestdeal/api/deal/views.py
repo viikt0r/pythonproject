@@ -5,27 +5,32 @@ from . serializers import DealsAllSerializer, DealsSerializer, DealsCommentSeria
 from django.db.models import Q
 from . . . permissions import IsOwnerOrReadOnly
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.filters import OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 
 class DealListView(mixins.CreateModelMixin, generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
     id = 'pk'
     serializer_class = DealsAllSerializer
+    filter_backends = (OrderingFilter,DjangoFilterBackend)
+    ordering_fields = ('updated_at',)
+    ordering = ('updated_at',)
 
     def get_queryset(self):
         qs = Deal.objects.all()
-        query = self.request.GET.get("q")
+        query = self.request.GET.get("q") #?q=ipad par exemple dans lurl
         if query is not None:
             qs = qs.filter(
-                Q(dea_title=query) | Q(dea_contenu=query)
+                Q(title__icontains=query) | Q(content__icontains=query)
             ).distinct()
-        return qs
+            print (qs.query)
+        return qs 
 
     def perform_create(self, serializer):
         serializer.save(user_add=self.request.user)
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
-
 
 class DealDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAuthenticated,)
