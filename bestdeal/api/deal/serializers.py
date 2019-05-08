@@ -35,6 +35,7 @@ class ScoreSerializer(serializers.ModelSerializer):
         model = Score
         fields = '__all__'
 
+
 class DealsAllSerializer(serializers.HyperlinkedModelSerializer):
     country = CountryField()
     nb_comment = serializers.SerializerMethodField(read_only=True)
