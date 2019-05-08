@@ -1,12 +1,13 @@
 from rest_framework import generics, mixins, permissions
 from . models import Deal, Score
 from . . tag.models import Tag
-from . serializers import DealsAllSerializer, DealsSerializer, DealsCommentSerializer, ScoreSerializer, TagAllSerializer
+from . serializers import DealsAllSerializer, DealsSerializer, DealsCommentSerializer, ScoreSerializer, TagAllSerializer, UserAllSerializer
 from django.db.models import Q
 from . . . permissions import IsOwnerOrReadOnly
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
+from django.contrib.auth.models import User
 
 class DealListView(mixins.CreateModelMixin, generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
@@ -81,6 +82,16 @@ class TagDeals(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return Tag.objects.all()
+
+class UserDeals(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Liste des deals pour un user
+    """
+    id = 'pk'
+    serializer_class = UserAllSerializer
+
+    def get_queryset(self):
+        return User.objects.all()
 
 #from django.db.models import Sum
 #all_sum = transaction.aggregate(Sum('amount'))['amount__sum']

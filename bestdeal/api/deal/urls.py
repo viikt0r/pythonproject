@@ -1,5 +1,5 @@
 from django.urls import re_path
-from . views import DealListView, DealDetailView, DealNoFk, DealCommentDetailView, ScoreListView, TagDeals
+from . views import DealListView, DealDetailView, DealNoFk, DealCommentDetailView, ScoreListView, TagDeals, UserDeals
 
 urlpatterns = [
     re_path(r'^deals/$', DealListView.as_view(), name='deal-list'),
@@ -8,4 +8,5 @@ urlpatterns = [
     re_path(r'^scores/$', ScoreListView.as_view(), name='score-list'),
     re_path(r'^deals/nofk/$', DealNoFk.as_view(), name='deal-list-all'),
     re_path(r'^tags/(?P<pk>[0-9a-f-]+)/deals/$', TagDeals.as_view(), name='tag-list-deal'),
+    re_path(r'^users/(?P<pk>[0-9a-f-]+)/deals/$', UserDeals.as_view(), name='user-list-deal'),
 ]

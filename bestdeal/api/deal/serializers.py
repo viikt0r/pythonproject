@@ -5,6 +5,7 @@ from . . user.serializers import UserSerializer
 from . . marque.serializers import MarquesSimpleSerializer
 from . . tag.serializers import TagSerializer
 from . . tag.models import Tag
+from django.contrib.auth.models import User
 from django_countries.fields import CountryField
 from django.db.models import Sum
 
@@ -79,3 +80,16 @@ class TagAllSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Tag
         fields = ('url', 'id', 'name', 'photo', 'main', 'nb_deals', 'dea_tags')
+
+
+class UserAllSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name="user-detail")
+    nb_deals = serializers.SerializerMethodField(read_only=True)
+    dea_users = DealsSerializer(many=True, read_only=True)
+
+    def get_nb_deals(self, Deal):
+        return Deal.dea_users.count()
+
+    class Meta:
+        model = User
+        fields = ('url', 'id', 'username', 'nb_deals', 'dea_users')
