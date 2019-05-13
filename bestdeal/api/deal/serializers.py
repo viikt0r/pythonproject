@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from . models import Deal, Score
+from . models import Deal, Score, Follow
 from . . commentaire.serializers import CommentSerializerNoFk
 from . . user.serializers import UserSerializer
 from . . marque.serializers import MarquesSimpleSerializer
@@ -93,3 +93,20 @@ class UserAllSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = ('url', 'id', 'username', 'nb_deals', 'dea_users')
+
+
+class UserFollowSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name="user-detail")
+    fol_dea_fk = DealsSerializer(many=True, read_only=True)
+    user_follow = serializers.ReadOnlyField(source='user_follow.username')    
+
+    class Meta:
+        model = Follow
+        fields = ('url', 'user_follow', 'fol_dea_fk')
+
+
+class FollowSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Follow
+        fields = '__all__'

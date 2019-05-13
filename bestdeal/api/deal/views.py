@@ -1,7 +1,8 @@
 from rest_framework import generics, mixins, permissions
-from . models import Deal, Score
+from . models import Deal, Score, Follow
 from . . tag.models import Tag
-from . serializers import DealsAllSerializer, DealsSerializer, DealsCommentSerializer, ScoreSerializer, TagAllSerializer, UserAllSerializer
+from . serializers import *
+#from . serializers import DealsAllSerializer, DealsSerializer, DealsCommentSerializer, ScoreSerializer, TagAllSerializer, UserAllSerializer
 from django.db.models import Q
 from . . . permissions import IsOwnerOrReadOnly
 from rest_framework.permissions import IsAuthenticated
@@ -47,7 +48,7 @@ class DealNoFk(generics.ListAPIView):
     queryset = Deal.objects.all()
     serializer_class = DealsSerializer
 
-class DealCommentDetailView(generics.RetrieveUpdateDestroyAPIView):
+class DealCommentDetailView(generics.RetrieveAPIView):
     id = 'pk'
     serializer_class = DealsCommentSerializer
 
@@ -73,7 +74,7 @@ class ScoreListView(mixins.CreateModelMixin, generics.ListAPIView):
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
-class TagDeals(generics.RetrieveUpdateDestroyAPIView):
+class TagDeals(generics.RetrieveAPIView):
     """
     Liste des deals pour un tag
     """
@@ -83,7 +84,7 @@ class TagDeals(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         return Tag.objects.all()
 
-class UserDeals(generics.RetrieveUpdateDestroyAPIView):
+class UserDeals(generics.RetrieveAPIView):
     """
     Liste des deals pour un user
     """
@@ -92,6 +93,30 @@ class UserDeals(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return User.objects.all()
+    
+
+class UserFollowDeals(generics.RetrieveAPIView):
+    id = 'pk'
+    serializer_class = UserFollowSerializer    
+
+    def get_queryset(self):
+        #return Follow.objects.all().filter(user_follow=self.request.user)
+        return Follow.objects.all()
+
+
+class FollowListView(mixins.CreateModelMixin, generics.ListAPIView):
+    id = 'pk'
+    serializer_class = FollowSerializer
+
+    def get_queryset(self):
+        qs = Follow.objects.all()
+        return qs
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
 
 #from django.db.models import Sum
 #all_sum = transaction.aggregate(Sum('amount'))['amount__sum']
