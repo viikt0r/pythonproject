@@ -101,7 +101,7 @@ class UserFollowDeals(generics.RetrieveAPIView):
 
     def get_queryset(self):
         #return Follow.objects.all().filter(user_follow=self.request.user)
-        return Follow.objects.all()
+        return User.objects.all()
 
 
 class FollowListView(mixins.CreateModelMixin, generics.ListAPIView):

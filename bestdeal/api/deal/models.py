@@ -57,7 +57,7 @@ class Score(models.Model):
 class Follow(models.Model):
     id = models.AutoField(primary_key=True)
     id_guid = models.UUIDField(default=uuid.uuid4, editable=False)
-    fol_dea_fk = models.ForeignKey(Deal, on_delete=models.CASCADE)
-    user_follow = models.ForeignKey(User, on_delete=models.CASCADE)
+    fol_dea_fk = models.ForeignKey(Deal, on_delete=models.CASCADE,related_name='follow_deals')
+    user_follow = models.ForeignKey(User, on_delete=models.CASCADE,related_name='follow_users')
     created_at = models.DateTimeField(auto_now_add=True)
 
