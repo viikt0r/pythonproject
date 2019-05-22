@@ -37,7 +37,7 @@ class MarqueDetailView(generics.RetrieveUpdateDestroyAPIView):
         return Marque.objects.all()
 
 
-class MarqueDeal(generics.ListAPIView):
+class MarqueListDeal(generics.ListAPIView):
     id = 'pk'
     serializer_class = MarquesAllSerializer
 

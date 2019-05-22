@@ -19,7 +19,7 @@ class DealListView(mixins.CreateModelMixin, generics.ListAPIView):
     ordering = ('updated_at',)
 
     def get_queryset(self):
-        qs = Deal.objects.all()
+        qs = Deal.objects.all().prefetch_related('tags')
         query = self.request.GET.get("q") #?q=ipad par exemple dans lurl
         if query is not None:
             qs = qs.filter(

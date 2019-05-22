@@ -15,8 +15,8 @@ class DealsSerializer(serializers.HyperlinkedModelSerializer):
     nb_comment = serializers.SerializerMethodField(read_only=True)
     moyenne_vote = serializers.SerializerMethodField(read_only=True)
     user_add = serializers.ReadOnlyField(source='user_add.username')
-    marques = MarquesSimpleSerializer(read_only=True, source='dea_mar_fk')
-    tags = TagSerializer(many=True, read_only=True, source='tag_set')
+    deal_marque = MarquesSimpleSerializer(read_only=True)
+    tags = TagSerializer(many=True, read_only=True)
 
     def get_nb_comment(self, Comment):
         return Comment.com_deals.count()
@@ -42,7 +42,7 @@ class DealsAllSerializer(serializers.HyperlinkedModelSerializer):
     nb_comment = serializers.SerializerMethodField(read_only=True)
     moyenne_vote = serializers.SerializerMethodField(read_only=True)
     user_add = serializers.ReadOnlyField(source='user_add.username')
-    marques = MarquesSimpleSerializer(read_only=True,source='dea_mar_fk')
+    marque = MarquesSimpleSerializer(read_only=True)
 
     def get_nb_comment(self, Comment):
         return Comment.com_deals.count()
@@ -72,14 +72,14 @@ class DealsCommentSerializer(serializers.HyperlinkedModelSerializer):
 class TagAllSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name="tag-detail")
     nb_deals = serializers.SerializerMethodField(read_only=True)
-    dea_tags = DealsSerializer(many=True, read_only=True)
+    tag = DealsSerializer(many=True, read_only=True)
 
     def get_nb_deals(self, Deal):
-        return Deal.dea_tags.count()
+        return Deal.tags.count()
 
     class Meta:
         model = Tag
-        fields = ('url', 'id', 'name', 'photo', 'main', 'nb_deals', 'dea_tags')
+        fields = ('url', 'id', 'name', 'photo', 'main', 'nb_deals', 'tag')
 
 
 class UserAllSerializer(serializers.HyperlinkedModelSerializer):

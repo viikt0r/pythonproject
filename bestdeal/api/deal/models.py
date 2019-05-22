@@ -30,8 +30,8 @@ class Deal(models.Model):
     country = CountryField(blank_label='(select country)', blank=True, null=True, default='CA')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    dea_mar_fk = models.ForeignKey(Marque, related_name='dea_marques', on_delete=models.CASCADE)
-    tag_set = models.ManyToManyField(Tag, related_name='dea_tags')
+    marque = models.ForeignKey(Marque, related_name='deal_marque', on_delete=models.CASCADE, default='')
+    tags = models.ManyToManyField(Tag, related_name='tag')
     user_add = models.ForeignKey(User, related_name='dea_users', on_delete=models.CASCADE)
 
     class Meta:
