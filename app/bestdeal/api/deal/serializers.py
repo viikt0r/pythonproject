@@ -5,6 +5,7 @@ from . . user.serializers import UserSerializer
 from . . marque.serializers import MarquesSimpleSerializer
 from . . tag.serializers import TagSerializer
 from . . tag.models import Tag
+from . . marque.models import Marque
 from django.contrib.auth.models import User
 from django_countries.fields import CountryField
 from django.db.models import Sum
@@ -29,7 +30,7 @@ class DealsSerializer(serializers.HyperlinkedModelSerializer):
         model = Deal
         fields = '__all__'
 
-    
+
 class ScoreSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -42,7 +43,7 @@ class DealsAllSerializer(serializers.HyperlinkedModelSerializer):
     nb_comment = serializers.SerializerMethodField(read_only=True)
     moyenne_vote = serializers.SerializerMethodField(read_only=True)
     user_add = serializers.ReadOnlyField(source='user_add.username')
-    marques = MarquesSimpleSerializer(read_only=True,source='dea_mar_fk')
+    marques = MarquesSimpleSerializer(read_only=True, source='dea_mar_fk')
 
     def get_nb_comment(self, Comment):
         return Comment.com_deals.count()
@@ -54,10 +55,10 @@ class DealsAllSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Deal
         fields = '__all__'
-        
-        
+
+
 class DealsCommentSerializer(serializers.HyperlinkedModelSerializer):
-    
+
     com_deals = CommentSerializerNoFk(many=True, read_only=True)
     nb_comment = serializers.SerializerMethodField(read_only=True)
 
@@ -67,7 +68,7 @@ class DealsCommentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Deal
         fields = ('url', 'id', 'nb_comment', 'com_deals')
-    
+
 
 class TagAllSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name="tag-detail")
@@ -94,6 +95,7 @@ class UserAllSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = ('url', 'id', 'username', 'nb_deals', 'dea_users')
 
+
 class FollowSerializer(serializers.ModelSerializer):
     deals = DealsSerializer(read_only=True, source='fol_dea_fk')
     users = UserSerializer(read_only=True, source='user_follow')
@@ -102,9 +104,10 @@ class FollowSerializer(serializers.ModelSerializer):
         model = Follow
         fields = '__all__'
 
+
 class UserFollowSerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name="user-detail")
-    follow_users = FollowSerializer(many=True, read_only=True)  
+    follow_users = FollowSerializer(many=True, read_only=True)
     nb_deals = serializers.SerializerMethodField(read_only=True)
 
     def get_nb_deals(self, obj):
@@ -115,3 +118,15 @@ class UserFollowSerializer(serializers.ModelSerializer):
         fields = ('url', 'id', 'nb_deals', 'username', 'follow_users')
 
 
+class MarqueAllSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name="marque-detail")
+    nb_deals = serializers.SerializerMethodField(read_only=True)
+    dea_marques = DealsSerializer(many=True, read_only=True)
+
+    def get_nb_deals(self, Deal):
+        return Deal.dea_marques.count()
+
+    class Meta:
+        model = Marque
+        fields = ('url', 'id', 'name', 'photo', 'link',
+                  'user_add', 'nb_deals', 'dea_marques')

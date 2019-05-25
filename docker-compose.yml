@@ -1,16 +1,16 @@
 version: "3"
 
 services:
-  app:
+  web:
     build:
       context: .
     ports:
-      - "8080:8080"
+      - "3000:3000"
     volumes:
       - ./app:/app
     command: >
       sh -c "python manage.py migrate &&
-             python manage.py runserver 0.0.0.0:8080"
+             python manage.py runserver 0.0.0.0:3000"
     environment:
       - DB_HOST=db
       - DB_NAME=app

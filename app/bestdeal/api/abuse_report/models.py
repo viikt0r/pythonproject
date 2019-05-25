@@ -11,11 +11,14 @@ class AbuseReport(models.Model):
     url_deal = models.URLField(default='')
     text = models.TextField()
     spam = models.BooleanField(default=False)
-    abu_dea_fk = models.ForeignKey(Deal, related_name='abuse_deal', on_delete=models.CASCADE, blank=True, null=True,)
-    abu_com_fk = models.ForeignKey(Comment, related_name='abuse_comment', on_delete=models.CASCADE, blank=True, null=True,)
+    abu_dea_fk = models.ForeignKey(
+        Deal, related_name='abuse_deal', on_delete=models.CASCADE, blank=True, null=True,)
+    abu_com_fk = models.ForeignKey(
+        Comment, related_name='abuse_comment', on_delete=models.CASCADE, blank=True, null=True,)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)    
-    user_add = models.ForeignKey(User, related_name='abuse_user', on_delete=models.CASCADE)
+    updated_at = models.DateTimeField(auto_now=True)
+    user_add = models.ForeignKey(
+        User, related_name='abuse_user', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.id

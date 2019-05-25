@@ -4,8 +4,11 @@ from . serializers import CommentSerializer
 from django.db.models import Q
 from . . . permissions import IsOwnerOrReadOnly
 
+
 class CommentListView(mixins.CreateModelMixin, generics.ListAPIView):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
+    """Liste des commentaires avec la possibilité de faire une recherche"""
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
     id = 'pk'
     serializer_class = CommentSerializer
 
@@ -26,7 +29,9 @@ class CommentListView(mixins.CreateModelMixin, generics.ListAPIView):
 
 
 class CommentDetailView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
+    """Detail d'un commentaires"""
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
     id = 'pk'
     serializer_class = CommentSerializer
 

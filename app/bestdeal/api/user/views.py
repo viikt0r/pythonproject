@@ -9,16 +9,20 @@ from rest_framework.settings import api_settings
 
 
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
+    """Detail d'un user"""
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
     id = 'pk'
     serializer_class = UserSerializer
 
     def get_queryset(self):
         return User.objects.all()
 
+
 class CreateUserView(generics.CreateAPIView):
     """Create a new user in the system"""
     serializer_class = UserSerializer
+
 
 class ManageUserView(generics.RetrieveUpdateAPIView):
     """Manage the authenticated user"""
