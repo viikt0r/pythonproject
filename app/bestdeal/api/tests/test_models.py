@@ -3,32 +3,36 @@ from unittest.mock import patch
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
-from core import models
-
-
-def sample_user(email='test@bestdeal.com', password='testpass'):
-    """Create a sample user"""
-    return get_user_model().objects.create_user(email, password)
+from . . marque import models
+from . . tag import models
+from . . deal import models
+from django.contrib.auth.models import User
 
 
 class ModelTests(TestCase):
 
+    #user = User.objects.create_user('foo', 'myemail@test.com', 'bar')
+    #self.user = User.objects.get(username='foo')
+
     def test_create_user_with_email_successful(self):
         """Test creating a new user with an email is successful"""
+        username = 'dbest'
         email = 'test@bestdeal.com'
         password = 'Testpass123'
         user = get_user_model().objects.create_user(
+            username=username,
             email=email,
             password=password
         )
 
-        self.assertEqual(user.email, email)
+        self.assertEqual(user.username, username)
         self.assertTrue(user.check_password(password))
 
     def test_new_user_email_normalized(self):
         """Test the email for a new user is normalized"""
+        username = "test2"
         email = 'test@bestdeal.COM'
-        user = get_user_model().objects.create_user(email, 'test123')
+        user = get_user_model().objects.create_user(username, email, 'test123')
 
         self.assertEqual(user.email, email.lower())
 
@@ -40,6 +44,7 @@ class ModelTests(TestCase):
     def test_create_new_superuser(self):
         """Test creating a new superuser"""
         user = get_user_model().objects.create_superuser(
+            'name4',
             'test@bestdeal.com',
             'test123'
         )
@@ -49,39 +54,40 @@ class ModelTests(TestCase):
 
     def test_tag_str(self):
         """Test the tag string representation"""
+        self.u1 = User.objects.create(username='user1')
         tag = models.Tag.objects.create(
-            user=sample_user(),
-            name='Vegan'
+            user_add=self.u1,
+            name='Telephone'
         )
 
         self.assertEqual(str(tag), tag.name)
 
-    def test_ingredient_str(self):
-        """Test the ingredient string respresentation"""
-        ingredient = models.Ingredient.objects.create(
-            user=sample_user(),
-            name='Cucumber'
+    def test_marque_str(self):
+        """Test the marque string respresentation"""
+        self.u2 = User.objects.create(username='user2')
+        marque = models.Marque.objects.create(
+            user_add=self.u2,
+            name='amazon',
+            link='https://amazon.ca'
         )
 
-        self.assertEqual(str(ingredient), ingredient.name)
+        self.assertEqual(str(marque), marque.name)
 
-    def test_recipe_str(self):
-        """Test the recipe string representation"""
-        recipe = models.Recipe.objects.create(
-            user=sample_user(),
-            title='Steak and mushroom sauce',
-            time_minutes=5,
-            price=5.00
+    def test_deal_str(self):
+        """Test the deal string representation"""
+        self.u3 = User.objects.create(username='user3')
+        marque = models.Marque.objects.create(
+            user_add=self.u3,
+            name='amazon',
+            link='https://amazon.ca'
+        )
+        deal = models.Deal.objects.create(
+            user_add=self.u3,
+            title='TV',
+            link='',
+            price_after=5.00,
+            country='CA',
+            dea_mar_fk=marque
         )
 
-        self.assertEqual(str(recipe), recipe.title)
-
-    @patch('uuid.uuid4')
-    def test_recipe_file_name_uuid(self, mock_uuid):
-        """Test that image is saved in the correct location"""
-        uuid = 'test-uuid'
-        mock_uuid.return_value = uuid
-        file_path = models.recipe_image_file_path(None, 'myimage.jpg')
-
-        exp_path = f'uploads/recipe/{uuid}.jpg'
-        self.assertEqual(file_path, exp_path)
+        self.assertEqual(str(deal), deal.title)
