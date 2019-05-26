@@ -1,28 +1,61 @@
 version: "3"
 
 services:
-  web:
+  backend:
+    container_name: backend
     build:
-      context: .
+      context: ./backend
+      dockerfile: Dockerfile
+    hostname: backend
     ports:
-      - "3000:3000"
+      - "8000:8000"
     volumes:
-      - ./app:/app
+      - ./backend:/backend
     command: >
       sh -c "python manage.py wait_for_db &&
              python manage.py migrate &&
-             python manage.py runserver 0.0.0.0:3000"
+             python manage.py runserver 0.0.0.0:8000"
     environment:
       - DB_HOST=db
-      - DB_NAME=app
+      - DB_NAME=bestdeal
       - DB_USER=postgres
       - DB_PASS=supersecretpassword
     depends_on:
       - db
 
   db:
+    container_name: db
     image: postgres:10-alpine
     environment:
-      - POSTGRES_DB=app
+      - POSTGRES_DB=bestdeal
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=supersecretpassword
+
+  frontend:
+    image: frontend:latest
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    command: npm run serve
+    volumes:
+      - .:/frontend
+    expose:
+      - "8080"
+    ports:
+      - "8080:8080"
+    environment:
+      - IN_DOCKER=1
+
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    restart: always
+    volumes:
+      - ./backend:/backend
+      - ./nginx:/etc/nginx/conf.d
+    ports:
+      - 80:80
+    depends_on:
+      - backend
+    command: nginx -g 'daemon off';
