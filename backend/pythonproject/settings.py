@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'django_countries',
     'rest_framework_swagger',
     'rest_framework.authtoken',
+    'corsheaders',
     'bestdeal',
 ]
 
@@ -43,8 +44,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
+CORS_ORIGIN_ALLOW_ALL = True
 ROOT_URLCONF = 'pythonproject.urls'
 
 TEMPLATES = [

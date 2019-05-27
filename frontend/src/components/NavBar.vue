@@ -11,7 +11,7 @@
         </span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn flat color="grey">
+      <v-btn flat color="grey" to="/Register">
         <span>Sign Out</span>
         <v-icon right>exit_to_app</v-icon>
       </v-btn>
@@ -46,7 +46,8 @@ export default {
                 { icon: 'dashboard', text:'Dashboard', route: '/'},
                 { icon: 'attach_money', text:'Deals', route: '/Deals'},
                 { icon: 'store', text: 'Brands', route: '/Brands'},
-                { icon: 'store', text: 'Login', route: '/Login'}
+                { text: 'Login', route: '/Login'},
+                { text: 'Secure', route: '/Secure'}
             ]
         }
     },
