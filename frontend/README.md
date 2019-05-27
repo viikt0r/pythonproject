@@ -1,4 +1,4 @@
-# bestdeal
+# my-app
 
 ## Project setup
 ```

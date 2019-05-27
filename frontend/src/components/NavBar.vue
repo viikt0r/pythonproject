@@ -1,31 +1,40 @@
 <template>
-    <nav>
-        <v-toolbar flat app>
-            <v-toolbar-side-icon @click="drawer =! drawer"></v-toolbar-side-icon>
-            <v-toolbar-title>
-                <span class="font-weight-light">Todo</span> 
-                <span>Bestdeals</span>
-            </v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-btn flat color="grey">
-                <span>Sign Out</span>
-                <v-icon right>exit_to_app</v-icon>
-            </v-btn>
-        </v-toolbar>
+  <nav>
+    <v-toolbar flat app>
+      <v-toolbar-side-icon @click="drawer =! drawer"></v-toolbar-side-icon>
+      <v-toolbar-title>
+        <span class="font-weight-light">Todo</span>
+        <span>Bestdeals</span>
+        <span v-if="isLoggedIn">
+        |
+        <a @click="logout">Logout</a>
+        </span>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn flat color="grey">
+        <span>Sign Out</span>
+        <v-icon right>exit_to_app</v-icon>
+      </v-btn>
+    </v-toolbar>
 
-        <v-navigation-drawer app v-model="drawer" class="primary">
-            <v-list>
-                <v-list-tile v-for="link in links" :key="link.text" router :to="link.route">
-                    <v-list-tile-action>
-                        <v-icon class="white--text">{{ link.icon }}</v-icon>
-                    </v-list-tile-action>
-                    <v-list-tile-content>
-                        <v-list-tile-title class="white--text">{{ link.text }}</v-list-tile-title>   
-                    </v-list-tile-content>   
-                </v-list-tile>
-            </v-list>    
-        </v-navigation-drawer>
-    </nav>
+    <v-navigation-drawer app v-model="drawer" class="primary">
+      <v-list>
+        <v-list-tile
+          v-for="link in links"
+          :key="link.text"
+          router
+          :to="link.route"
+        >
+          <v-list-tile-action>
+            <v-icon class="white--text">{{ link.icon }}</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title class="white--text">{{ link.text }}</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
+  </nav>
 </template>
 
 <script>
@@ -36,9 +45,21 @@ export default {
             links: [
                 { icon: 'dashboard', text:'Dashboard', route: '/'},
                 { icon: 'attach_money', text:'Deals', route: '/Deals'},
-                { icon: 'store', text: 'Brands', route: '/Brands'}
+                { icon: 'store', text: 'Brands', route: '/Brands'},
+                { icon: 'store', text: 'Login', route: '/Login'}
             ]
         }
-    }
+    },
+    computed : {
+      isLoggedIn : function(){ return this.$store.getters.isLoggedIn}
+    },
+    methods: {
+      logout: function () {
+        this.$store.dispatch('logout')
+        .then(() => {
+          this.$router.push('/login')
+        })
+      }
+    },
 }
 </script>
