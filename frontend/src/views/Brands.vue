@@ -1,26 +1,15 @@
 <template lang="html">
   <v-layout row wrap>
-    <v-flex xs12 md4 v-for="brand in results" :key="brand.id">
+    <v-flex xs12 md4 v-for="res in results" :key="res.id">
       <v-card>
-        <v-card-media :src="brand.photo" height="50px">
+        <v-card-media :src="res.photo">
         </v-card-media>
         <v-card-title primary-title>
           <div>
-            <h3 class="headline mb-0">{{brand.name}}</h3>
-            <div>{{brand.link}}</div>
+            <h3 class="headline mb-0">{{res.name}}</h3>
+            <div>{{res.link}}</div>
           </div>
         </v-card-title>
-        <v-card-actions>
-          <v-btn
-            :to="{
-              name: 'Brand',
-              params: {
-                id: brand.id
-              }
-            }"
-            flat
-            color="orange">View</v-btn>
-        </v-card-actions>
       </v-card>
     </v-flex>
   </v-layout>
@@ -34,15 +23,16 @@ export default {
       results: [],
     };
   },
-  mounted() {
+  created() {
     this.load();
   },
   methods: {
     load() {
-      API.marques()
-        .then((results) => {
-          this.results = results;
-        });
+      API.marques().then(response => {
+          this.results = response.data.results;
+        }).catch(error => {
+          console.log(error.response)
+        })
     },
   },
 };

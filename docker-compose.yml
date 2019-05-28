@@ -39,7 +39,7 @@ services:
     container_name: frontend
     command: npm run serve
     volumes:
-      - .:/frontend
+      - ./frontend:/frontend
     expose:
       - "8080"
     ports:
