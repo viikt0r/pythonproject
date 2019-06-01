@@ -8,6 +8,8 @@ from django.core.files.storage import FileSystemStorage
 
 class MarqueListView(mixins.CreateModelMixin, generics.ListAPIView):
     """Liste des marques avec la possibilité de faire une recherche"""
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly,)
     id = 'pk'
     serializer_class = MarquesSerializer
 

@@ -6,15 +6,20 @@
         <span class="font-weight-light">Todo</span>
         <span>Bestdeals</span>
         <span v-if="isLoggedIn">
-        |
-        <a @click="logout">Logout</a>
+          |
+          <a @click="logout">Logout</a>
         </span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn flat color="grey" to="/Register">
-        <span>Sign Out</span>
+      <v-btn flat color="grey" to="/Register" v-if="!isLoggedIn">
+        <span>Sign up</span>
         <v-icon right>exit_to_app</v-icon>
       </v-btn>
+      <v-btn
+        class="btn btn-primary btn-margin"
+        v-if="!isLoggedIn"
+        to="/Login"
+      >Log In</v-btn>
     </v-toolbar>
 
     <v-navigation-drawer app v-model="drawer" class="primary">

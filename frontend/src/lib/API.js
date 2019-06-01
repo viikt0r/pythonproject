@@ -1,16 +1,23 @@
-//import ezFetch from 'ez-fetch';
 import axios from 'axios'
-const API_URL = 'http://192.168.99.100:8000/bestdeal/';
+const API_URL = 'http://localhost:8000/bestdeal/';
 
 export default {
-    marques() {
-        //return ezFetch.get(API_URL);
-        return  axios.get(API_URL+'marques', 
-        { 
-          headers: 
-          {
-           "Authorization": "JWT "+localStorage.getItem('token') 
-          }
+  marques(intId = "") {
+    if (intId) {
+      return axios.get(API_URL + 'marques/' + intId,
+        {
+          //headers:
+          //{
+          //  "Authorization": "JWT " + localStorage.getItem('token')
+          //}
         });
-    },
+    }
+    else {
+      return axios.get(API_URL + 'marques/');
+    }
+  },
+  tags() {
+    return axios.get(API_URL + 'tags');
+  },
+
 };

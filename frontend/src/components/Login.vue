@@ -1,16 +1,32 @@
 <template>
- <div>
-   <form class="login" @submit.prevent="login">
-     <h1>Sign in</h1>
-     <label>username</label>
-     <input required v-model="username" type="text" placeholder="Name"/>
-     <label>Password</label>
-     <input required v-model="password" type="password" placeholder="Password"/>
-     <hr/>
-     <button type="submit">Login</button>
-   </form>
- </div>
+  <v-flex xs4 class="grey lighten-4">
+    <v-container style="position: relative;top: 13%;" class="text-xs-center">
+      <v-card flat>
+        <v-card-title primary-title>
+          <h4>Login</h4>
+        </v-card-title>
+        <v-form @submit.prevent="login">
+          <v-text-field
+            prepend-icon="person"
+            v-model="username"
+            label="Username"
+          ></v-text-field>
+          <v-text-field
+            prepend-icon="lock"
+            v-model="password"
+            label="Password"
+            type="password"
+          ></v-text-field>
+          <v-card-actions>
+            <v-btn type="submit" primary large block>Login</v-btn>
+          </v-card-actions>
+        </v-form>
+      </v-card>
+    </v-container>
+  </v-flex>
 </template>
+
+
 <script>
 	export default {
 		data(){

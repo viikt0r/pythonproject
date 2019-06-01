@@ -21,6 +21,7 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 class CreateUserView(generics.CreateAPIView):
     """Create a new user in the system"""
+    permission_classes = (permissions.AllowAny,)
     serializer_class = UserSerializer
 
 

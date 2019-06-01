@@ -14,7 +14,8 @@ from django.contrib.auth.models import User
 
 class DealListView(mixins.CreateModelMixin, generics.ListAPIView):
     """Liste des deals avec la possibilité de faire une recherche"""
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly,)
     id = 'pk'
     serializer_class = DealsAllSerializer
     filter_backends = (OrderingFilter, DjangoFilterBackend)
