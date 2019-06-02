@@ -1,20 +1,20 @@
 from rest_framework import generics, mixins, permissions
-from . models import Marque
-from . serializers import MarquesSerializer
+from . models import Brand
+from . serializers import BrandsSerializer
 from django.db.models import Q
 from . . . permissions import IsOwnerOrReadOnly
 from django.core.files.storage import FileSystemStorage
 
 
-class MarqueListView(mixins.CreateModelMixin, generics.ListAPIView):
+class BrandListView(mixins.CreateModelMixin, generics.ListAPIView):
     """Liste des marques avec la possibilité de faire une recherche"""
     permission_classes = (
         permissions.IsAuthenticatedOrReadOnly,)
     id = 'pk'
-    serializer_class = MarquesSerializer
+    serializer_class = BrandsSerializer
 
     def get_queryset(self):
-        qs = Marque.objects.all()
+        qs = Brand.objects.all()
         query = self.request.GET.get("q")
         if query is not None:
             qs = qs.filter(
@@ -32,12 +32,12 @@ class MarqueListView(mixins.CreateModelMixin, generics.ListAPIView):
         return self.create(request, *args, **kwargs)
 
 
-class MarqueDetailView(generics.RetrieveUpdateDestroyAPIView):
+class BrandDetailView(generics.RetrieveUpdateDestroyAPIView):
     """Detail d'une marque"""
     permission_classes = (
         permissions.IsAuthenticatedOrReadOnly,)
     id = 'pk'
-    serializer_class = MarquesSerializer
+    serializer_class = BrandsSerializer
 
     def get_queryset(self):
-        return Marque.objects.all()
+        return Brand.objects.all()

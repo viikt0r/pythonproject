@@ -16,7 +16,7 @@ urlpatterns = [
     re_path(r'^users/(?P<pk>[0-9a-f-]+)/follow/$',
             UserFollowDeals.as_view(), name='user-follow-deal'),
     re_path(r'^follow/$', FollowListView.as_view(), name='follow-list'),
-    re_path(r'^marques/(?P<pk>[0-9a-f-]+)/deals/$',
-            MarqueDeals.as_view(), name='marque-list-deal'),
+    re_path(r'^brands/(?P<pk>[0-9a-f-]+)/deals/$',
+            BrandDeals.as_view(), name='brand-list-deal'),
 
 ]

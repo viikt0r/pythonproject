@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from . . tag.models import Tag
-from . . marque.models import Marque
+from . . brand.models import Brand
 from django.contrib.auth.models import User
 from django_countries.fields import CountryField
 import uuid
@@ -39,8 +39,8 @@ class Deal(models.Model):
                            blank=True, null=True, default='CA')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    dea_mar_fk = models.ForeignKey(
-        Marque, related_name='dea_marques', on_delete=models.CASCADE, default='')
+    brand_fk = models.ForeignKey(
+        Brand, related_name='dea_brands', on_delete=models.CASCADE, default='')
     tag_set = models.ManyToManyField(Tag, related_name='dea_tags')
     user_add = models.ForeignKey(
         User, related_name='dea_users', on_delete=models.CASCADE)

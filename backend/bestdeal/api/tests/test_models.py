@@ -3,7 +3,7 @@ from unittest.mock import patch
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
-from . . marque import models
+from . . brand import models
 from . . tag import models
 from . . deal import models
 from django.contrib.auth.models import User
@@ -62,21 +62,21 @@ class ModelTests(TestCase):
 
         self.assertEqual(str(tag), tag.name)
 
-    def test_marque_str(self):
+    def test_brand_str(self):
         """Test the marque string respresentation"""
         self.u2 = User.objects.create(username='user2')
-        marque = models.Marque.objects.create(
+        brand = models.Brand.objects.create(
             user_add=self.u2,
             name='amazon',
             link='https://amazon.ca'
         )
 
-        self.assertEqual(str(marque), marque.name)
+        self.assertEqual(str(brand), brand.name)
 
     def test_deal_str(self):
         """Test the deal string representation"""
         self.u3 = User.objects.create(username='user3')
-        marque = models.Marque.objects.create(
+        brand = models.Brand.objects.create(
             user_add=self.u3,
             name='amazon',
             link='https://amazon.ca'
@@ -87,7 +87,7 @@ class ModelTests(TestCase):
             link='',
             price_after=5.00,
             country='CA',
-            dea_mar_fk=marque
+            brand_fk=brand
         )
 
         self.assertEqual(str(deal), deal.title)

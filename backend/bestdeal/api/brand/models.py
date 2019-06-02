@@ -1,18 +1,18 @@
 from django.db import models
 import uuid, os
 
-def marque_image_file_path(instance, filename):
-    """Generate file path for new marque image"""
+def brand_image_file_path(instance, filename):
+    """Generate file path for new brand image"""
     ext = filename.split('.')[-1]
     filename = f'{uuid.uuid4()}.{ext}'
 
-    return os.path.join('uploads/marque/', filename)
+    return os.path.join('uploads/brand/', filename)
 
-class Marque(models.Model):
+class Brand(models.Model):
     id = models.AutoField(primary_key=True)
     id_guid = models.UUIDField(default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=200)
-    photo = models.ImageField(null=True, upload_to=marque_image_file_path)
+    photo = models.ImageField(null=True, upload_to=brand_image_file_path)
     link = models.URLField(default='')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

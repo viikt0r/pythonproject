@@ -2,9 +2,9 @@ import axios from 'axios'
 const API_URL = 'http://localhost:8000/bestdeal/';
 
 export default {
-  marques(intId = "") {
+  brands(intId = "") {
     if (intId) {
-      return axios.get(API_URL + 'marques/' + intId,
+      return axios.get(API_URL + 'brands/' + intId,
         {
           //headers:
           //{
@@ -13,7 +13,7 @@ export default {
         });
     }
     else {
-      return axios.get(API_URL + 'marques/');
+      return axios.get(API_URL + 'brands/');
     }
   },
   tags() {

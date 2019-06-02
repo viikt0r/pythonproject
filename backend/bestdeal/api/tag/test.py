@@ -7,7 +7,7 @@ from rest_framework.test import APIClient
 
 from . models import Tag 
 from . . deal.models import Deal
-from . . marque.models import Marque
+from . . brand.models import Brand
 
 from . serializers import TagSerializer
 
@@ -79,7 +79,7 @@ class PrivateTagsApiTests(TestCase):
         """Test filtering tags by those assigned to deals"""
         tag1 = Tag.objects.create(user_add=self.user, name='Caméras')
         tag2 = Tag.objects.create(user_add=self.user, name='Casques')
-        marque = Marque.objects.create(
+        brand = Brand.objects.create(
             user_add=self.user, name='Maxi', link='https://www.maxi.ca/'
         )
         deal = Deal.objects.create(
@@ -88,7 +88,7 @@ class PrivateTagsApiTests(TestCase):
             link='',
             price_after=300.00,
             country='CA',
-            dea_mar_fk=marque
+            brand_fk=brand
         )
         deal.tag_set.add(tag1)
 
@@ -105,10 +105,10 @@ class PrivateTagsApiTests(TestCase):
         """Test filtering tags by assigned returns unique items"""
         tag = Tag.objects.create(user_add=self.user, name='Audio')
         Tag.objects.create(user_add=self.user, name='Console')
-        marque1 = Marque.objects.create(
+        brand1 = Brand.objects.create(
             user_add=self.user, name='Bestbuy', link='https://bestbuy.ca'
         )
-        marque2 = Marque.objects.create(
+        brand2 = Brand.objects.create(
             user_add=self.user, name='Amazon', link='https://amazon.ca'
         )
         deal1 = Deal.objects.create(
@@ -117,7 +117,7 @@ class PrivateTagsApiTests(TestCase):
             link='',
             price_after=150.00,
             country='CA',
-            dea_mar_fk=marque1
+            brand_fk=brand1
         )
         deal1.tag_set.add(tag)
         deal2 = Deal.objects.create(
@@ -126,7 +126,7 @@ class PrivateTagsApiTests(TestCase):
             link='',
             price_after=233.15,
             country='CA',
-            dea_mar_fk=marque2
+            brand_fk=brand2
         )
         deal2.tag_set.add(tag)
 

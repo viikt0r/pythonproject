@@ -1,7 +1,7 @@
 from rest_framework import generics, mixins, permissions
 from . models import Deal, Score, Follow
 from . . tag.models import Tag
-from . . marque.models import Marque
+from . . brand.models import Brand
 from . serializers import *
 #from . serializers import DealsAllSerializer, DealsSerializer, DealsCommentSerializer, ScoreSerializer, TagAllSerializer, UserAllSerializer
 from django.db.models import Q
@@ -133,15 +133,15 @@ class FollowListView(mixins.CreateModelMixin, generics.ListAPIView):
         return self.create(request, *args, **kwargs)
 
 
-class MarqueDeals(generics.RetrieveAPIView):
+class BrandDeals(generics.RetrieveAPIView):
     """
     Liste des deals pour une marque
     """
     id = 'pk'
-    serializer_class = MarqueAllSerializer
+    serializer_class = BrandAllSerializer
 
     def get_queryset(self):
-        return Marque.objects.all()
+        return Brand.objects.all()
 
 #from django.db.models import Sum
 #all_sum = transaction.aggregate(Sum('amount'))['amount__sum']

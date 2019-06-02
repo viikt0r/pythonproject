@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     load() {
-      API.marques().then(response => {
+      API.brands().then(response => {
           this.results = response.data.results;
         }).catch(error => {
           console.log(error.response)
