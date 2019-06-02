@@ -16,7 +16,7 @@ class DealsSerializer(serializers.HyperlinkedModelSerializer):
     nb_comment = serializers.SerializerMethodField(read_only=True)
     moyenne_vote = serializers.SerializerMethodField(read_only=True)
     user_add = serializers.ReadOnlyField(source='user_add.username')
-    brands = BrandsSimpleSerializer(read_only=True, source='brand_fk')
+    brands = BrandsSimpleSerializer(read_only=True, source='dea_mar_fk')
     tags = TagSerializer(many=True, read_only=True, source='tag_set')
 
     def get_nb_comment(self, Comment):
