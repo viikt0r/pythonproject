@@ -17,7 +17,7 @@
             <v-flex xs7>
               <v-card-title>
                 <div>
-                  <span class="headline"><router-link to="/Deals">{{res.title}}</router-link></span><br>
+                  <span class="headline"><router-link :to="'/Deals/' + res.id">{{res.title}}</router-link></span><br>
                   <span class="red--text">{{res.price_after}} </span>
                   <span class="grey--text" v-if="res.price_before > 0">{{res.price_before}} </span>
                   <span v-if="res.price_percent > 0 ">-{{res.price_percent}}% </span><br>

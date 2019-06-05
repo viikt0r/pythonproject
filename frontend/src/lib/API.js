@@ -19,8 +19,14 @@ export default {
   tags() {
     return axios.get(API_URL + 'tags');
   },
-  deals() {
-    return axios.get(API_URL + 'deals');
+  deals(intId = "") {
+    if (intId) {
+      return axios.get(API_URL + 'deals/' + intId);
+    }
+    else {
+      return axios.get(API_URL + 'deals');
+    }
+
   },
 
 };

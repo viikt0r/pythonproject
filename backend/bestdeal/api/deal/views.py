@@ -41,7 +41,8 @@ class DealListView(mixins.CreateModelMixin, generics.ListAPIView):
 
 class DealDetailView(generics.RetrieveUpdateDestroyAPIView):
     """Detail d'un deal"""
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly,)
     id = 'pk'
     serializer_class = DealsSerializer
 

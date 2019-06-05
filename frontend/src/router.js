@@ -2,7 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Dashboard from './views/Dashboard.vue'
 import Deals from './views/Deals'
+import Deal from './views/Deal'
 import Brands from './views/Brands'
+import Brand from './views/Brand'
 import Login from './components/Login'
 import Register from './components/Register'
 import Secure from './components/Secure'
@@ -24,9 +26,19 @@ let router = new Router({
       component: Deals
     },
     {
+      path: '/Deals/:id',
+      name: 'deal',
+      component: Deal
+    },
+    {
       path: '/Brands',
       name: 'brands',
       component: Brands
+    },
+    {
+      path: '/Brands/:id',
+      name: 'brand',
+      component: Brand,
     },
     {
       path: '/Login',
@@ -42,7 +54,7 @@ let router = new Router({
       path: '/secure',
       name: 'secure',
       component: Secure,
-      meta: { 
+      meta: {
         requiresAuth: true
       }
     },
@@ -51,14 +63,14 @@ let router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-  if(to.matched.some(record => record.meta.requiresAuth)) {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
     if (store.getters.isLoggedIn) {
       next()
       return
     }
-    next('/login') 
+    next('/login')
   } else {
-    next() 
+    next()
   }
 })
 
