@@ -42,6 +42,7 @@ class DealsAllSerializer(serializers.HyperlinkedModelSerializer):
     country = CountryField()
     nb_comment = serializers.SerializerMethodField(read_only=True)
     moyenne_vote = serializers.SerializerMethodField(read_only=True)
+    price_percent = serializers.SerializerMethodField(read_only=True)
     user_add = serializers.ReadOnlyField(source='user_add.username')
     brands = BrandsSimpleSerializer(read_only=True, source='brand_fk')
 
@@ -51,6 +52,13 @@ class DealsAllSerializer(serializers.HyperlinkedModelSerializer):
     def get_moyenne_vote(self, Score):
         totalsco = Score.sco_deals.aggregate(moyenne_vote=Sum('score'))
         return totalsco["moyenne_vote"]
+
+    def get_price_percent(self, Deal):
+        perc = 0
+        if Deal.price_before and Deal.price_after:
+            perc = 100 - ((Deal.price_after * 100) / Deal.price_before)
+        
+        return perc
 
     class Meta:
         model = Deal

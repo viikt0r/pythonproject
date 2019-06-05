@@ -1,5 +1,5 @@
 import axios from 'axios'
-const API_URL = 'http://192.168.99.100:8000/bestdeal/';
+const API_URL = 'http://localhost:8000/bestdeal/';
 
 export default {
   brands(intId = "") {

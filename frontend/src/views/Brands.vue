@@ -2,13 +2,9 @@
   <v-layout row wrap>
     <v-flex xs12 md4 v-for="res in results" :key="res.id">
       <v-card>
-        <v-card-media :src="res.photo">
+        <v-card-media :src="res.photo" height="50px" width="50px">
         </v-card-media>
-        <v-card-title primary-title>
-          <div>
-            <h3 class="headline mb-0">{{res.name}}</h3>
-            <div>{{res.link}}</div>
-          </div>
+        <h3 class="headline mb-0">{{res.name}}</h3>
         </v-card-title>
       </v-card>
     </v-flex>
